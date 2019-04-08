@@ -47,6 +47,7 @@ Post MVP will render map data
 - Cors
 - React-router-dom
 - Bcrypt
+- Nokogiri
 
 ## Wireframes
 ![](https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/e716be64002c480c3b170b24cb755a41/Wireframes.jpg)
