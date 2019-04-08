@@ -29,7 +29,7 @@ Post MVP will render map data
 - View Daily Travel Advisories
 
 ## Entity Relationship Diagram
-![] (https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/ac4b1e8ac97649fe93ed500bd40806c5/erd.jpg)
+![](https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/ac4b1e8ac97649fe93ed500bd40806c5/erd.jpg)
 
 ## API Endpoint Documentations
  get '/logout', to: 'sessions#destroy'
@@ -47,10 +47,10 @@ Post MVP will render map data
 - Bcrypt
 
 ## Wireframes
-![] (https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/e716be64002c480c3b170b24cb755a41/Wireframes.jpg)
+![](https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/e716be64002c480c3b170b24cb755a41/Wireframes.jpg)
 
 ## Component Hierarchy
-![] (https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/4fb39df51fce438ec728cf23921ef269/fouryapp.jpg)
+![](https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/4fb39df51fce438ec728cf23921ef269/fouryapp.jpg)
 
 ## Code Snippet
 Later
