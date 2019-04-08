@@ -17,6 +17,7 @@ MVP will be an app where you can register and log in. User can use drop down men
 - Login
 - Save Route Information
 - View Daily Travel Advisories
+- Update Route Data
 
 ### POST MVP
 Post MVP will render map data
@@ -27,6 +28,7 @@ Post MVP will render map data
 - App login
 - Save Route Information
 - View Daily Travel Advisories
+- Update Route Data
 
 ## Entity Relationship Diagram
 ![](https://trello-attachments.s3.amazonaws.com/5cab4a3da1a85d685b7b6237/5cab4a8b32d44b2d7b424c8b/ac4b1e8ac97649fe93ed500bd40806c5/erd.jpg)
