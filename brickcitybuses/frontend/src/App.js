@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route, Link, Redirect } from 'react-router-dom';
 import './App.css';
 import {
   getTrips,
@@ -6,7 +7,12 @@ import {
   deleteTrip,
   getTrip
    } from './services/api-helpers';
+   import {
+  registerUser,
+  verifyToken,
+  loginUser } from './services/user';
 import Header from './components/Header';
+import LoginForm from './components/LoginForm';
 
 class App extends Component {
   constructor(props) {
@@ -14,14 +20,21 @@ class App extends Component {
     this.state = {
       trips: [],
       trip: '',
-      //trip parameters empty strings
+      origin: '',
+      destination: '',
       tripToEdit: '',
-      currentView: 'All Trips'
+      currentView: 'All Trips',
+      loginFormData: {
+        email: '',
+        password: ''
+      }
     }
 
     this.handleAllTripsClick = this.handleAllTripsClick.bind(this);
     this.handleAddTripClick = this.handleAddTripClick.bind(this);
     this.handleTripClick = this.handleTripClick.bind(this);
+    /*this.handleLoginFormChange = this.handleLoginFormChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);*/
   }
 
   componentDidMount() {
@@ -29,7 +42,7 @@ class App extends Component {
   }
 
   fetchAllTrips() {
-    getTrips()
+    getTrips(1)
     .then(resp => {
       const { trips } = resp;
       this.setState({ trips });
@@ -46,16 +59,17 @@ class App extends Component {
 
   handleSubmit(e, method) {
     e.preventDefault();
-    const { /*trip parameters*/
+    const { origin: origin, destination: destination,
             tripToEdit } = this.state;
     const newTrip = {
-      //trip parameters = each other
+      origin: origin, destination: destination
     }
     saveTrip(newTrip, method, tripToEdit)
     .then(resp => {
       this.fetchAllTrips();
       this.setState({
-        //trip parameters
+        origin: '',
+        destination: '',
         tripToEdit: '',
         currentView: this.state.trip ? 'Single Trip' : 'All Trips'
       });
@@ -71,11 +85,12 @@ class App extends Component {
 
   handleEditClick(trip) {
     const { id,
-    /*trip parameters*/ } = trip;
+    origin, destination } = trip;
 
     this.setState({
       tripToEdit: id,
-      //trip parameters = each other
+      origin: origin,
+      destination: destination
     });
   }
 
