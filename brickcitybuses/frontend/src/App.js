@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import './App.css';
 import {
   getTrips,
@@ -13,13 +14,20 @@ import {
   loginUser } from './services/user';
 import Header from './components/Header';
 import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      registerFormData: {
+        name: '',
+        email: '',
+        password: '',
+      },
       trips: [],
       trip: '',
+      currentUser: null,
       origin: '',
       destination: '',
       tripToEdit: '',
@@ -33,11 +41,64 @@ class App extends Component {
     this.handleAllTripsClick = this.handleAllTripsClick.bind(this);
     this.handleAddTripClick = this.handleAddTripClick.bind(this);
     this.handleTripClick = this.handleTripClick.bind(this);
-    /*this.handleLoginFormChange = this.handleLoginFormChange.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);*/
+    this.handleRegisterFormChange = this.handleRegisterFormChange.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
+    this.handleLoginFormChange = this.handleLoginFormChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
-  componentDidMount() {
+  handleRegisterFormChange(e) {
+    const { name, value } = e.target;
+
+    this.setState(prevState => ({
+      registerFormData: {
+        ...prevState.registerFormData,
+        [name]: value
+      }
+    }));
+  }
+
+  async handleRegister(e) {
+    e.preventDefault();
+    const { registerFormData } = this.state;
+    const { user } = await registerUser(registerFormData);
+    this.setState({
+      currentUser: user
+    });
+    this.fetchTrips();
+    this.props.history.push('/');
+  }
+
+  async fetchTrips() {
+    const trips = await getTrips();
+    this.setState({
+      trips
+    });
+  }
+
+  async handleLogin(e) {
+    e.preventDefault();
+    const { user }= await loginUser(this.state.loginFormData);
+    this.setState({
+      currentUser: user
+    });
+
+    this.fetchTrips();
+    this.props.history.push('/');
+  }
+
+  handleLoginFormChange(e) {
+    const { name, value } = e.target;
+
+    this.setState(prevState => ({
+      loginFormData: {
+        ...prevState.loginFormData,
+        [name]: value
+      }
+    }));
+  }
+
+  async componentDidMount() {
     this.fetchAllTrips();
   }
 

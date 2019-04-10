@@ -2,14 +2,10 @@ import { updateToken, api } from './api-helpers';
 
 export const registerUser = async (user) => {
   const { email, password } = user;
-  const last_name = user.lastName;
-  const first_name = user.firstName;
 
   const resp = await api.post('/users/', {
     email,
-    password,
-    first_name,
-    last_name
+    password
   });
 
   const { data } = resp;
