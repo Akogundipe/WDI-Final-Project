@@ -11,8 +11,8 @@ const updateToken = (token) => {
 
 const BASE_URL = "http://localhost:3000";
 
-export function getTrips() {
-    return fetch(`${BASE_URL}/users/1/trips`)
+export function getTrips(user_id) {
+    return fetch(`${BASE_URL}/users/${user_id}/trips`)
         .then(resp => resp.json())
         .catch(error => {
             throw Error(error);
@@ -20,7 +20,7 @@ export function getTrips() {
 }
 
 export function getTrip(user_id, id) {
-    return fetch(`${BASE_URL}/users/1/trips/${id}`)
+    return fetch(`${BASE_URL}/users/${user_id}/trips/${id}`)
     .then(resp => resp.json())
     .catch(error => {
         throw Error(error);
@@ -36,7 +36,7 @@ export function saveTrip(trip, method, id, user_id) {
         }
     }
 
-    return fetch(`${BASE_URL}/users/1/trips/${id}`, opts)
+    return fetch(`${BASE_URL}/users/${user_id}/trips/${id}`, opts)
         .then(resp => resp.json())
         .catch(error => {
             throw Error(error);
@@ -53,6 +53,11 @@ export function deleteTrip(id, user_id) {
         .catch(error => {
             throw Error(error);
         });
+}
+
+export const updateTrip = async (data, id, user_id) => {
+  const resp = await api.put(`/users/${user_id}/trips/${id}`, data);
+  return resp.data.trip;
 }
 
 export {

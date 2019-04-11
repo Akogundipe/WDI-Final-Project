@@ -60,11 +60,11 @@ class TripsController < ApplicationController
 
   private
 
-  # def bus_params
-  #   params.require(:bus).permit(:origin, :destination, :user_id)
-  # end
   def bus_params
-    params.permit(:origin, :destination)
+    params.require(:bus).permit(:origin, :destination, :user_id)
   end
+  # def bus_params
+  #   params.permit(:origin, :destination)
+  # end
 
 end

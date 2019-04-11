@@ -6,7 +6,8 @@ import {
   getTrips,
   saveTrip,
   deleteTrip,
-  getTrip
+  getTrip,
+  updateTrip
    } from './services/api-helpers';
    import {
   registerUser,
@@ -15,6 +16,9 @@ import {
 import Header from './components/Header';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import TripList from './components/TripList';
+import TripForm from './components/TripForm';
+import EditTripForm from './components/EditTripForm';
 
 class App extends Component {
   constructor(props) {
@@ -25,12 +29,13 @@ class App extends Component {
         email: '',
         password: '',
       },
+      tripForm: {
+        origin: '',
+        destination: ''
+      },
       trips: [],
       trip: '',
       currentUser: null,
-      origin: '',
-      destination: '',
-      tripToEdit: '',
       currentView: 'All Trips',
       loginFormData: {
         email: '',
@@ -45,6 +50,44 @@ class App extends Component {
     this.handleRegister = this.handleRegister.bind(this);
     this.handleLoginFormChange = this.handleLoginFormChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.destroyTrip = this.destroyTrip.bind(this);
+    this.mountEditForm = this.mountEditForm.bind(this);
+    this.handleTripFormChange = this.handleTripFormChange.bind(this);
+    this.handleCreateTrip = this.handleCreateTrip.bind(this);
+    this.handleUpdateTrip = this.handleUpdateTrip.bind(this);
+  }
+
+  async destroyTrip(id) {
+    await deleteTrip(id);
+    this.setState(prevState => ({
+      trips: prevState.trips.filter(trip => trip.id !== id)
+    }));
+  }
+
+  async mountEditForm(id) {
+    let trip = this.state.trips.find(el => el.id === parseInt(id));
+    if (trip === undefined) {
+      await verifyToken();
+      await this.fetchTrips();
+      trip = this.state.trips.find(el => el.id === parseInt(id));
+    }
+
+    this.setState({
+      tripForm: {
+        origin: trip.origin,
+        destination: trip.destination
+      }
+    });
+  }
+
+  async handleUpdateTrip(ev, id) {
+    ev.preventDefault();
+    const data = this.state.tripForm;
+    const trip = await updateTrip(data, id, this.state.currentUser.user_id);
+    this.setState(prevState => ({
+      trips: prevState.trips.map(tr => tr.id === trip.id ? trip : tr)
+    }));
+    this.props.history.push('/users/:user_id/trips/:id');
   }
 
   handleRegisterFormChange(e) {
@@ -84,6 +127,7 @@ class App extends Component {
     });
 
     this.fetchTrips();
+    debugger;
     this.props.history.push('/');
   }
 
@@ -97,13 +141,27 @@ class App extends Component {
       }
     }));
   }
-
-  async componentDidMount() {
+  /*async componentDidMount() {
     this.fetchAllTrips();
+  }*/
+  async componentDidMount() {
+    try {
+      const { user } = await verifyToken();
+      if (user !== undefined) {
+      this.setState({
+        currentUser: user
+      })
+      await this.fetchTrips();
+      } else {
+        this.props.history.push('/login');
+      }
+    } catch (e) {
+      this.props.history.push('/login');
+    }
   }
 
   fetchAllTrips() {
-    getTrips(1)
+    getTrip()
     .then(resp => {
       const { trips } = resp;
       this.setState({ trips });
@@ -135,6 +193,25 @@ class App extends Component {
         currentView: this.state.trip ? 'Single Trip' : 'All Trips'
       });
     });
+  }
+
+  async handleCreateTrip(e) {
+    e.preventDefault();
+    const trip = await saveTrip(this.state.tripForm);
+    this.setState(prevState => ({
+      trips: [...prevState.trips, trip]
+    }));
+    this.props.history.push('/users/:user_id/trips');
+  }
+
+  handleTripFormChange(e) {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      tripForm: {
+        ...prevState.tripForm,
+        [name]: value
+      }
+    }))
   }
 
   handleDeleteClick(id) {
@@ -181,13 +258,104 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header
+        {/*<Header
           handleLinkClick={this.handleLinkClick}
           handleAllTripsClick={this.handleAllTripsClick}
-          handleAddTripClick={this.handleAddTripClick} />
+          handleAddTripClick={this.handleAddTripClick} />*/}
+          <h1>Brick City Buses</h1>
+          {this.state.currentUser === null && (
+            <nav>
+              <Link to="/register">Go Sign Up</Link>
+              <Link to="/login">Go Sign In</Link>
+              <button onClick={async () => {
+                const trips = await this.fetchTrips();
+              }}>Fetch Trips</button>
+          </nav>
+          )
+          }
+          <Route exact path="/" render={(props) => {
+            return (
+              <>
+              {this.state.currentUser && <Redirect to="/" />}
+              </>
+            )
+          }} />
+          <Route path="/register" render={(props) => {
+            const {
+              name,
+              email,
+              password
+            } = this.state.registerFormData;
+            return (
+              <RegisterForm
+                name={name}
+                email={email}
+                password={password}
+                handleChange={this.handleRegisterFormChange}
+                handleSubmit={this.handleRegister} />
+            )
+          }} />
+        <Route exact path="/users/:user_id/trips" render={(props) => {
+          const {
+            origin,
+            destination
+          } = this.state.tripForm;
+
+          return (
+            <TripForm
+              origin={origin}
+              destination={destination}
+              handleChange={this.handleTripFormChange}
+              handleSubmit={this.handleCreateTrip} />
+          );
+        }} />
+      <Route path="/users/:user_id/trips/:id" render={(props) => {
+          const {
+            origin,
+            destination,
+          } = this.state.tripForm;
+        const { id } = props.match.params;
+        const trip = this.state.trips.find(el => el.id === parseInt(id));
+        return (
+          <EditTripForm
+            origin={origin}
+            destination={destination}
+            id={id}
+            trip={trip}
+            mountEditForm={this.mountEditForm}
+            handleSubmit={this.handleUpdateTrip}
+            handleChange={this.handleTripFormChange} />
+        )
+
+        }} />
+
+      <Route exact path="/users/:user_id/trips" render={(props) => {
+        const {
+          trips
+        } = this.state;
+        return (
+          <TripList
+            currentUser={this.state.currentUser}
+            destroyTrip={this.destroyTrip}
+            trips={trips} />
+        );
+      }} />
+        <Route path="/login" render={(props) => {
+            const {
+              email,
+              password
+            } = this.state.loginFormData;
+            return (
+              <LoginForm
+                email={email}
+                password={password}
+                handleChange={this.handleLoginFormChange}
+                handleSubmit={this.handleLogin} />
+            )
+          }} />
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
