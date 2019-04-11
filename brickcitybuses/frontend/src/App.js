@@ -19,6 +19,7 @@ import RegisterForm from './components/RegisterForm';
 import TripList from './components/TripList';
 import TripForm from './components/TripForm';
 import EditTripForm from './components/EditTripForm';
+import Home from './components/Home';
 
 class App extends Component {
   constructor(props) {
@@ -127,7 +128,6 @@ class App extends Component {
     });
 
     this.fetchTrips();
-    debugger;
     this.props.history.push('/');
   }
 
@@ -276,7 +276,7 @@ class App extends Component {
           <Route exact path="/" render={(props) => {
             return (
               <>
-              {this.state.currentUser && <Redirect to="/" />}
+              {this.state.currentUser && <Redirect to="/home" />}
               </>
             )
           }} />
@@ -353,6 +353,7 @@ class App extends Component {
                 handleSubmit={this.handleLogin} />
             )
           }} />
+          <Route path="/home" component={ Home } />
       </div>
     );
   }
