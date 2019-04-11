@@ -84,7 +84,7 @@ class App extends Component {
   async handleUpdateTrip(ev, id) {
     ev.preventDefault();
     const data = this.state.tripForm;
-    const trip = await updateTrip(data, id, this.state.currentUser.user_id);
+    const trip = await updateTrip(data, id, this.state.currentUser.id);
     this.setState(prevState => ({
       trips: prevState.trips.map(tr => tr.id === trip.id ? trip : tr)
     }));
@@ -114,7 +114,7 @@ class App extends Component {
   }
 
   async fetchTrips() {
-    const trips = await getTrips();
+    const trips = await getTrips(this.state.currentUser.id);
     this.setState({
       trips
     });
