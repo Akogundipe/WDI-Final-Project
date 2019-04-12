@@ -25,7 +25,8 @@ class TripsController < ApplicationController
   #    end
   # end
   def create
-    bus = current_user.buses.create!(bus_params)
+    @user = User.find(params[:user_id])
+    bus = @user.buses.create!(bus_params)
     render json: { bus: bus }
   end
 

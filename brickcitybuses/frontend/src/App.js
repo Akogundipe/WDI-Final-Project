@@ -183,21 +183,21 @@ class App extends Component {
     const newTrip = {
       origin: origin, destination: destination
     }
-    saveTrip(newTrip, method, tripToEdit)
+    console.log('hello I am a handle submit');
+    saveTrip(newTrip, this.state.currentUser.id)
     .then(resp => {
       this.fetchAllTrips();
       this.setState({
         origin: '',
         destination: '',
         tripToEdit: '',
-        currentView: this.state.trip ? 'Single Trip' : 'All Trips'
       });
     });
   }
 
   async handleCreateTrip(e) {
     e.preventDefault();
-    const trip = await saveTrip(this.state.tripForm);
+    const trip = await saveTrip(this.state.tripForm, this.state.currentUser.id);
     this.setState(prevState => ({
       trips: [...prevState.trips, trip]
     }));
@@ -353,7 +353,14 @@ class App extends Component {
                 handleSubmit={this.handleLogin} />
             )
           }} />
-          <Route path="/home" component={ Home } />
+          <Route path="/home" render={(props) => {
+            return (
+              <Home
+                currentUser={this.state.currentUser}
+                handleChange={this.handleLoginFormChange}
+                handleSubmit={this.handleLogin} />
+            )
+          }} component={ Home } />
       </div>
     );
   }

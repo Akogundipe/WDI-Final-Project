@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://infinite-coast-14557.herokuapp.com/'
+  baseURL: 'http://localhost:3000/'
 });
 
 const updateToken = (token) => {
@@ -9,7 +9,7 @@ const updateToken = (token) => {
   api.defaults.headers.common.authorization = `Bearer ${token}`;
 };
 
-const BASE_URL = "https://infinite-coast-14557.herokuapp.com/";
+const BASE_URL = "http://localhost:3000/";
 
 export function getTrips(user_id) {
     return fetch(`${BASE_URL}/users/${user_id}/trips`)
@@ -27,16 +27,17 @@ export function getTrip(user_id, id) {
     });
 }
 
-export function saveTrip(trip, method, id, user_id) {
+export function saveTrip(trip, user_id) {
+  console.log(user_id);
     const opts = {
-        method: method,
-        body: JSON.stringify(trip),
+        method: "POST",
+        body: JSON.stringify({bus: trip}),
         headers: {
             'Content-Type': 'application/json'
         }
     }
 
-    return fetch(`${BASE_URL}/users/${user_id}/trips/${id}`, opts)
+    return fetch(`${BASE_URL}/users/${user_id}/trips`, opts)
         .then(resp => resp.json())
         .catch(error => {
             throw Error(error);
