@@ -43,10 +43,10 @@ class TripsController < ApplicationController
   #   end
   # end
   def update
-    bus = Bus.find(params[:id])
-    if bus.user == current_user
-      bus.update!(bus_params)
-      render json: { bus: bus }
+    @bus = Bus.find(params[:id])
+    if @bus.user == current_user
+      @bus.update!(bus_params)
+      render json: { bus: @bus }
     else
       render :unauthorized
     end
@@ -62,7 +62,7 @@ class TripsController < ApplicationController
   private
 
   def bus_params
-    params.require(:bus).permit(:origin, :destination, :user_id)
+    params.permit(:origin, :destination, :user_id)
   end
   # def bus_params
   #   params.permit(:origin, :destination)

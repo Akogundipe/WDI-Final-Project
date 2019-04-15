@@ -20,8 +20,8 @@ class UsersController < ApplicationController
     if new_user.valid?
       new_user.save!
       user_data = {
-        name: user.name,
-        email: user.email
+        name: new_user.name,
+        email: new_user.email
       }
       render json: { user: user_data, token: gen_token(new_user.id)}
     else

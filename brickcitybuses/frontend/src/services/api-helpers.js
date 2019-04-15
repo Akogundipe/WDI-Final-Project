@@ -49,7 +49,7 @@ export function deleteTrip(id, user_id) {
         method: 'DELETE'
     }
 
-    return fetch(`${BASE_URL}/users/1/trips/${id}`, opts)
+    return fetch(`${BASE_URL}/users/${user_id}/trips/${id}`, opts)
         .then(resp => resp.json())
         .catch(error => {
             throw Error(error);
@@ -58,7 +58,7 @@ export function deleteTrip(id, user_id) {
 
 export const updateTrip = async (data, id, user_id) => {
   const resp = await api.put(`/users/${user_id}/trips/${id}`, data);
-  return resp.data.trip;
+  return resp.data.bus;
 }
 
 export {

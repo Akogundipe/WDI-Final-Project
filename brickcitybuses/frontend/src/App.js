@@ -59,7 +59,7 @@ class App extends Component {
   }
 
   async destroyTrip(id) {
-    await deleteTrip(id);
+    await deleteTrip(id, this.state.currentUser.id);
     this.setState(prevState => ({
       trips: prevState.trips.filter(trip => trip.id !== id)
     }));
@@ -68,7 +68,10 @@ class App extends Component {
   async mountEditForm(id) {
     let trip = this.state.trips.find(el => el.id === parseInt(id));
     if (trip === undefined) {
-      await verifyToken();
+      const data = await verifyToken();
+      this.setState({
+        currentUser: data.user
+      });
       await this.fetchTrips();
       trip = this.state.trips.find(el => el.id === parseInt(id));
     }
@@ -88,7 +91,7 @@ class App extends Component {
     this.setState(prevState => ({
       trips: prevState.trips.map(tr => tr.id === trip.id ? trip : tr)
     }));
-    this.props.history.push('/users/:user_id/trips/:id');
+    this.props.history.push(`/users/${this.state.currentUser.id}/trips/${trip.id}`);
   }
 
   handleRegisterFormChange(e) {
@@ -331,8 +334,12 @@ class App extends Component {
 
       <Route exact path="/users/:user_id/trips" render={(props) => {
         const {
-          trips
+          trips,
+          currentUser
         } = this.state;
+        if (currentUser == null) {
+          return <div></div>
+        }
         return (
           <TripList
             currentUser={this.state.currentUser}
@@ -354,6 +361,13 @@ class App extends Component {
             )
           }} />
           <Route path="/home" render={(props) => {
+            const {
+              trips,
+              currentUser
+            } = this.state;
+            if (currentUser == null) {
+              return <div></div>
+            }
             return (
               <Home
                 currentUser={this.state.currentUser}
