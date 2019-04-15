@@ -9,7 +9,8 @@ const updateToken = (token) => {
   api.defaults.headers.common.authorization = `Bearer ${token}`;
 };
 
-const BASE_URL = "http://localhost:3000/";
+//const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "https://infinite-coast-14557.herokuapp.com/";
 
 export function getTrips(user_id) {
     return fetch(`${BASE_URL}/users/${user_id}/trips`)
