@@ -91,7 +91,13 @@ class App extends Component {
     this.setState(prevState => ({
       trips: prevState.trips.map(tr => tr.id === trip.id ? trip : tr)
     }));
-    this.props.history.push(`/users/${this.state.currentUser.id}/trips/${trip.id}`);
+    this.setState({
+      tripForm: {
+        origin: '',
+        destination: ''
+      }
+    })
+    this.props.history.push(`/users/${this.state.currentUser.id}/trips`)
   }
 
   handleRegisterFormChange(e) {
@@ -163,13 +169,13 @@ class App extends Component {
     }
   }
 
-  fetchAllTrips() {
-    getTrip()
-    .then(resp => {
-      const { trips } = resp;
-      this.setState({ trips });
-    })
-  }
+  // async fetchAllTrips() {
+  //   await getTrips()
+  //   .then(resp => {
+  //     const { trips } = resp;
+  //     this.setState({ trips });
+  //   })
+  // }
 
   handleChange(e) {
     const { name, value } = e.target;
@@ -179,32 +185,47 @@ class App extends Component {
     });
   }
 
-  handleSubmit(e, method) {
-    e.preventDefault();
-    const { origin: origin, destination: destination,
-            tripToEdit } = this.state;
-    const newTrip = {
-      origin: origin, destination: destination
-    }
-    console.log('hello I am a handle submit');
-    saveTrip(newTrip, this.state.currentUser.id)
-    .then(resp => {
-      this.fetchAllTrips();
-      this.setState({
-        origin: '',
-        destination: '',
-        tripToEdit: '',
-      });
-    });
-  }
+  // handleSubmit(e, method) {
+  //   e.preventDefault();
+  //   const { origin: origin, destination: destination,
+  //           tripToEdit } = this.state;
+  //   const newTrip = {
+  //     origin: origin, destination: destination
+  //   }
+  //   console.log('hello I am a handle submit');
+  //   saveTrip(newTrip, this.state.currentUser.id)
+  //   .then(resp => {
+  //     this.fetchAllTrips();
+  //     this.setState({
+  //       origin: '',
+  //       destination: '',
+  //       tripToEdit: '',
+  //     });
+  //   });
+  // }
 
   async handleCreateTrip(e) {
+    const {origin, destination } = this.state.tripForm
     e.preventDefault();
     const trip = await saveTrip(this.state.tripForm, this.state.currentUser.id);
+
+    this.setState({
+      origin: trip.origin,
+      destination: trip.destination
+    })
+
     this.setState(prevState => ({
       trips: [...prevState.trips, trip]
     }));
-    this.props.history.push('/users/:user_id/trips');
+
+    this.setState({
+      tripForm: {
+        origin: '',
+        destination: ''
+      }
+    })
+     await this.fetchTrips();
+
   }
 
   handleTripFormChange(e) {
