@@ -56,6 +56,7 @@ class App extends Component {
     this.handleTripFormChange = this.handleTripFormChange.bind(this);
     this.handleCreateTrip = this.handleCreateTrip.bind(this);
     this.handleUpdateTrip = this.handleUpdateTrip.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   async destroyTrip(id) {
@@ -132,11 +133,22 @@ class App extends Component {
   async handleLogin(e) {
     e.preventDefault();
     const { user }= await loginUser(this.state.loginFormData);
+    const blankLoginData = { email: '', password: ''}
     this.setState({
-      currentUser: user
+      currentUser: user,
+      loginFormData: blankLoginData
     });
 
     this.fetchTrips();
+    this.props.history.push('/');
+  }
+
+  async handleLogout() {
+    // e.preventDefault();
+    localStorage.removeItem('authToken');
+    this.setState({
+      currentUser: null
+    });
     this.props.history.push('/');
   }
 
@@ -363,6 +375,7 @@ class App extends Component {
         }
         return (
           <TripList
+            handleLogout={this.handleLogout}
             currentUser={this.state.currentUser}
             destroyTrip={this.destroyTrip}
             trips={trips} />
