@@ -6,3 +6,18 @@ nav {
   display: flex;
   justify-content: space-around;
 }
+
+body {
+  background-image: url('components/images/new-2015-njt-cng-mci-cruiser-busjpg-a5f7968aba0f7cdc.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+  margin: 0 auto;
+  padding: 50px;
+  font-size: 20px;
+  color: orange;
+  font-weight: 700;
+
+
+}

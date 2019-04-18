@@ -301,11 +301,13 @@ class App extends Component {
           <h1>Brick City Buses</h1>
           {this.state.currentUser === null && (
             <nav>
-              <Link to="/register">Go Sign Up</Link>
+              <Link to="/register">Go Sign Up</Link>&nbsp;&nbsp;&nbsp;
               <Link to="/login">Go Sign In</Link>
-              <button onClick={async () => {
-                const trips = await this.fetchTrips();
-              }}>Fetch Trips</button>
+              <section>
+              <p>
+              Are you tired of lengthy loading screens for bus apps? Do you wish you had could save common routes you take daily? You have come to the right place! Sign up and click "view trip list" and start saving your routes.
+              </p>
+              </section>
           </nav>
           )
           }

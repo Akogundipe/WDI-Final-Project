@@ -6,7 +6,6 @@ export default (props) => {
   <div>
     <h2>The Trip List</h2>
     <><button onClick={() => props.handleLogout()}>Logout</button></>
-    <Link to={`/users/${props.currentUser.id}/trips`}>Create a new Trip</Link>
     {props.trips.map(trip => (
       <div key={trip.id}>
         <h2>Origin: {trip.origin}</h2>
