@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
 
   before_action :ensure_signed_in
   def encode(payload)
-    payload[:token] = JWT.encode(payload, Rails.application.secrets.secret_key_base)
+    payload[:token] = JWT.encode(payload, Rails.application.credentials.secret_key_base)
   end
 
   def decode(token)
