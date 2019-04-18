@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
 
   def decode(token)
     begin
-    body = JWT.decode(token, Rails.application.secrets.secret_key_base)[0]
+    body = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
     HashWithIndifferentAccess.new body
     rescue
       nil

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  //baseURL: 'http://localhost:3000'
-  baseURL: 'https://infinite-coast-14557.herokuapp.com/'
+  baseURL: 'http://localhost:3000'
+  //baseURL: 'https://infinite-coast-14557.herokuapp.com/'
 });
 
 const updateToken = (token) => {
@@ -10,8 +10,8 @@ const updateToken = (token) => {
   api.defaults.headers.common.authorization = `Bearer ${token}`;
 };
 
-//const BASE_URL = "http://localhost:3000";
-const BASE_URL = "https://infinite-coast-14557.herokuapp.com/";
+const BASE_URL = "http://localhost:3000";
+//const BASE_URL = "https://infinite-coast-14557.herokuapp.com/";
 
 export const getTrips = async (user_id) => {
     return await fetch(`${BASE_URL}/users/${user_id}/trips`)
